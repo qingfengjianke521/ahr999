@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQBRTBDBMN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YQBRTBDBMN');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <title>AHR999 指数图表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        h2, h3 {
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .data-table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse; /* 使用 collapse 让表格线条更紧密 */
+            margin-top: 20px;
+            background-color: white;
+            border: 1px solid #e0e0e0; /* 边框颜色为浅灰色 */
+        }
+
+        .data-table th, .data-table td {
+            padding: 8px 10px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0; /* 改为细灰色线条 */
+            white-space: nowrap;
+        }
+
+        .data-table thead th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .data-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* 针对手机横屏设置全屏显示图表 */
+        @media (max-width: 768px) {
+            /* 隐藏不需要的部分 */
+            h2, h3, .table-container {
+                display: none;
+            }
+
+            .container {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+
+            /* 设置图表全屏显示 */
+            #chart {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+
+        /* 居中显示分页信息 */
+        .pagination-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            text-align: center; /* 居中显示文本 */
+        }
+
+        /* 分页按钮样式 */
+        .pagination-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .pagination-button:hover {
+            background-color: #45a049;
+        }
+
+        .pagination-button[disabled] {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>比特币AHR999估值指数</h2>
+        <!-- 显示图表 -->
+        <div id="chart">{{ plot_html|safe }}</div>
+
+        <!-- 直接使用Pandas生成的HTML数据表格 -->
+        <h3>每日数据</h3>
+        <div class="table-container">
+            {{ tables|safe }}
+        </div>
+    </div>
+    <div class="pagination-info">
+        显示第 {{ offset + 1 }} 到第 {{ end_row }} 行，共 {{ total_rows }} 行数据
+    </div>
+
+    <!-- 居中的“前一页”和“下一页”按钮 -->
+    <div class="pagination-buttons">
+        <form action="/" method="get" style="display: inline;">
+            <input type="hidden" name="offset" value="{{ prev_offset }}">
+            <button type="submit" class="pagination-button" {% if offset == 0 %}disabled{% endif %}>前一页</button>
+        </form>
+
+        <form action="/" method="get" style="display: inline;">
+            <input type="hidden" name="offset" value="{{ next_offset }}">
+            <button type="submit" class="pagination-button" {% if offset + limit >= total_rows %}disabled{% endif %}>下一页</button>
+        </form>
+    </div>
+
+    <!-- 提示用户旋转屏幕以获得最佳体验 -->
+    <script>
+        if (window.innerHeight > window.innerWidth) {
+            alert('为了获得最佳效果，请旋转您的设备到横屏模式');
+        }
+    </script>
+</body>
+</html>
